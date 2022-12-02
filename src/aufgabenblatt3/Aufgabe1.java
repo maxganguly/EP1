@@ -62,7 +62,7 @@ public class Aufgabe1 {
         //********************************************************
         //TODO zu Punkt d): Implementieren Sie hier Ihre Lösung für die Angabe
         System.out.println("Ihre Ausgabe:");
-        DrawBanner(12,22);
+        DrawBanner(104,404);
         //********************************************************
         //*
         System.out.println();
