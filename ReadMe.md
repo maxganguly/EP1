@@ -2,4 +2,4 @@
 - [ ] Aufgabenblatt 1
 - [ ] Aufgabenblatt 2
 - [X] Aufgabenblatt 3
-- [ ] Aufgabenblatt 4
+- [X] Aufgabenblatt 4
