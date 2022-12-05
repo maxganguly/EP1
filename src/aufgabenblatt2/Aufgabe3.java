@@ -4,18 +4,43 @@ package aufgabenblatt2;
 */
 public class Aufgabe3 {
 
-    private static boolean isHappyNumber(int number) {
+    public static boolean isHappyNumber(int number) {
         //TODO: Implementieren Sie hier Ihre Lösung für die Angabe
-        return false; //Zeile kann geändert oder entfernt werden.
-    }
+    	while(number >0){
+    		int sum = 0;
+    		while(number >0){
+    			int div = number % 10;
+    			sum += div*div;
+    			number /= 10;
+   			}
+   			if(sum == 1) {
+   				return true;
+   			}
+   			else if(sum == 4) {
+   				return false;
+   			}
+   			number = sum;
+   		}
+   		return false;
+   	}
 
     private static int countHappyNumbers(int start, int end) {
-        //TODO: Implementieren Sie hier Ihre Lösung für die Angabe
-        return -1; //Zeile kann geändert oder entfernt werden.
+        int count = 0;
+        while(start <= end) {
+        	if(isHappyNumber(start))
+        		count++;
+        	start++;
+        }
+        return count; //Zeile kann geändert oder entfernt werden.
     }
 
     private static void printHappyNumbers(int start, int end) {
         //TODO: Implementieren Sie hier Ihre Lösung für die Angabe
+    	while(start <= end) {
+        	if(isHappyNumber(start))
+        		System.out.print(start+" ");
+        	start++;
+        }
     }
 
     public static void main(String[] args) {
@@ -38,5 +63,7 @@ public class Aufgabe3 {
         //**********************************************************************
 
         //TODO: Testen Sie hier alle Methoden mit verschiedenen Inputs!
+        System.out.println(countHappyNumbers(0, 100));
+        printHappyNumbers(0, 100);
     }
 }
