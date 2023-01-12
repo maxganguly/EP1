@@ -1,6 +1,8 @@
 package aufgabenblatt6;
 
 import java.awt.Color;
+import java.awt.GraphicsEnvironment;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import codedraw.CodeDraw;
@@ -95,9 +97,10 @@ public class Aufgabe1 {
 			}
 		}
 	}
-	public static int moveofAI(int[][] board, int player) {
+	public static int moveofAI(int[][] board, int player, double difficulty) {
 		long timestart = System.currentTimeMillis();
-		int[] mini = minimax(board, player, true, 9, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		boolean bestmove = difficulty >= Math.random();
+		int[] mini = minimax(board, player, true, 9, Integer.MIN_VALUE, Integer.MAX_VALUE,bestmove);
 		int fail = 0;
 		if(mini[1] == -1) {
 			for(int i = 0; i < board.length;i++) {
@@ -126,7 +129,16 @@ public class Aufgabe1 {
 		}
 		return mini[1];
 	}
-	public static int[] minimax(int[][] board, int player, boolean currentplayer, int depth, int alpha, int beta) {
+	public static int getnext(int current) {
+		if(current == 0) {
+			return -1;
+		}else if(current  < 0) {
+			return -current;
+		}else {
+			return -(current+1);
+		}
+	}
+	public static int[] minimax(int[][] board, int player, boolean currentplayer, int depth, int alpha, int beta,boolean bestmove) {
 		int score;
 		int move = -1;
 		if(depth == 0) {
@@ -137,9 +149,10 @@ public class Aufgabe1 {
 			}
 			return new int[]{score};
 		}
+		int temp = 0;
 		if(currentplayer) {
 			score = Integer.MIN_VALUE;
-			for(int i = 0; i < board.length;i++) {
+			for(int i = board.length/2; i < board.length && i >= 0;i=board.length/2 + temp) {
 				if(isMovePossible(board, i)) {
 					int[][] newboard = new int[board.length][board[0].length];
 					for(int x = 0; x< board.length; x++) {
@@ -148,7 +161,10 @@ public class Aufgabe1 {
 						}
 					}
 					makeMove(newboard, player, i);
-					int[] mini = minimax(newboard, (player%2)+1, !currentplayer, depth-1, alpha, beta);
+					if(existsWinner(newboard, player)) {
+						return new int[] {100,i,Math.max(alpha, 100),beta};
+					}
+					int[] mini = minimax(newboard, (player%2)+1, !currentplayer, depth-1, alpha, beta,bestmove);
 					/*
 					if(transitiontable.containsKey(newboard.hashCode())) {
 						mini = transitiontable.get(newboard.hashCode());
@@ -162,7 +178,7 @@ public class Aufgabe1 {
 						score = mini[0];
 						move = i;
 						//System.out.println("Currently best move = "+score+" on column "+i);
-					}
+					}else
 					if(mini[0] > beta) {
 						break;
 					}
@@ -171,10 +187,14 @@ public class Aufgabe1 {
 				if(score == -1) {
 					
 				}
+				temp= getnext(temp);
+			}
+			if(!bestmove) {
+				score-= (int)(Math.random()* 200)-100;
 			}
 		}else { // enemy
 			score = Integer.MAX_VALUE;
-			for(int i = 0; i < board.length;i++) {
+			for(int i = board.length/2; i < board.length && i >= 0;i=board.length/2 + temp) {
 				if(isMovePossible(board, i)) {
 					int[][] newboard = new int[board.length][board[0].length];
 					for(int x = 0; x< board.length; x++) {
@@ -183,7 +203,10 @@ public class Aufgabe1 {
 						}
 					}
 					makeMove(newboard, player, i);
-					int[] mini = minimax(newboard, (player%2)+1, !currentplayer, depth-1, alpha, beta);
+					if(existsWinner(newboard, player)) {
+						return new int[] {-100,i,alpha,Math.max(beta, -100)};
+					}
+					int[] mini = minimax(newboard, (player%2)+1, !currentplayer, depth-1, alpha, beta,bestmove);
 					/*
 					if(transitiontable.containsKey(newboard.hashCode())) {
 						mini = transitiontable.get(newboard.hashCode());
@@ -202,9 +225,13 @@ public class Aufgabe1 {
 					}
 					if(mini[0] < alpha) {
 						break;
-					}
+					}else
 					beta = Math.max(beta, mini[0]);
 				}
+				temp= getnext(temp);
+			}
+			if(!bestmove) {
+				score+= (int)(Math.random()* 200)-100;
 			}
 		}
 		
@@ -224,14 +251,14 @@ public class Aufgabe1 {
 	public static int evalpoints(int[][] field, int player) {
 		int current = 0;
 		if(existsWinner(field, player)) {
-			current = 100;
+			return 100; //current = 100;
 		}else if(existsWinner(field, (player%2)+1)) {
-			current = -100;
+			return -100; //current = -100;
 		}
 		
 		for(int i = 0; i < field[0].length;i++) {// Center is important
 			if(field[field.length/2][i] == player) {
-				current += 5;
+				current += 7;
 			}
 		}
 		
@@ -353,6 +380,7 @@ public class Aufgabe1 {
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		System.out.println(Arrays.toString(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()));
 		transitiontable = new HashMap<>();
 		int cols = 7;
 		int rows = 6;
@@ -377,7 +405,7 @@ public class Aufgabe1 {
 			
 			//*
 			//System.out.println("Drew the board");
-			makeMove(field,currentplayer,moveofAI(field,currentplayer));
+			makeMove(field,currentplayer,moveofAI(field,currentplayer,1));
 			fields_used++;
 			if(existsWinner(field, currentplayer)) {
 				drawGameBoard(cd, field, squaresize);
