@@ -17,6 +17,7 @@ public class Aufgabe5 {
     	drawCirclePatternRecursively(myDrawObj, x+r, y-r, r/2);
     	drawCirclePatternRecursively(myDrawObj, x-r, y+r, r/2);
     	drawCirclePatternRecursively(myDrawObj, x+r, y+r, r/2);
+    	myDrawObj.show(50);
     	myDrawObj.setColor(Color.YELLOW);
     	myDrawObj.fillCircle(x, y, r);
     	myDrawObj.setColor(Color.RED);
@@ -37,6 +38,7 @@ public class Aufgabe5 {
     		    	myDrawObj.fillCircle(x, y, i);
     		    	myDrawObj.setColor(Color.RED);
     		    	myDrawObj.drawCircle(x, y, i);
+    		    	//myDrawObj.show(50);
         		}
     		}
     	}
@@ -47,6 +49,7 @@ public class Aufgabe5 {
         // TODO: Implementieren Sie hier Ihre Lösung für die Angabe
     	int size = 512;
     	CodeDraw cd = new CodeDraw(size,size);
+    	cd.setInstantDraw(true);
     	//drawCirclePatternRecursively(cd, size/2, size/2, size/4);
     	drawCirclePatternIteratively(cd, size/2);
     	cd.show();

@@ -11,13 +11,14 @@ public class Aufgabe4 {
         // TODO: Implementieren Sie hier Ihre Lösung für die rekursive Methode
     	if(index > workArray.length-1)
     		return;
+    	shiftHighestValue(workArray, index+1);
     	if(workArray[index] > workArray[workArray.length-1]) {
     		
     		int temp = workArray[index];
     		workArray[index] = workArray[workArray.length-1];
     		workArray[workArray.length-1] = temp;
     	}
-    	shiftHighestValue(workArray, index+1);
+    	
     }
 
     private static boolean containsValue(int[] workArray, int value) {
